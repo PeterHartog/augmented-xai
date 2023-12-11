@@ -1,0 +1,17 @@
+_target_: representation.src.actions.smiles.cleaning.SmilesCleaning
+
+input_columns:
+output_columns: canonical_smiles
+verbose: false
+logger: null
+sanitize: true
+remove_salts: true
+remove_stereo: true
+remove_metal_atoms: false
+keep_largest_fragment: true
+neutralize_mol: false
+standardize_tautomers: false
+remove_duplicates: true
+canonicalize_smiles: true
+limit_seq_len: null
+constrains: null

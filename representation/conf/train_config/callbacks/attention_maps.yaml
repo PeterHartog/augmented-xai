@@ -1,0 +1,3 @@
+attention_maps:
+  _target_: representation.src.interpretation.attention.AttentionMap
+  save_dir: ???

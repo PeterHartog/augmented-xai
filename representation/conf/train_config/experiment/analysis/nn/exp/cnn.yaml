@@ -1,0 +1,134 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /DataRegistry: tdc_ames.yaml
+  - override /ModelRegistry: transformer_cnn.yaml
+  - override /pretrain_model: null
+  - override /logger: null #wandb.yaml
+  - override /trainer: ddp.yaml
+  - override /callbacks: default.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["analysis", "ME2C", "nn"]
+
+seed: 1234
+
+train: false
+test: false
+predict: true
+
+task_name: "encoder_decoder_ME2C_cnn" # task name, determines output directory path
+
+ckpt_path: pretrained_models/trained_models/encoder_decoder_ME2C_cnn/multiruns/2023-10-19_13-01-11/5/checkpoints/epoch_048.ckpt
+
+trainer:
+  devices:
+    - 0
+
+ModelRegistry:
+  lr: 5e-5
+  weight_decay: 0.0001
+
+  emb_size: 512 # 512 is better than 64
+  skip_connection: false # false is better
+
+  adaption: sum # [sum, mean, flatten, neural_net]
+  adapt_embedding: false
+  dim_pred_hidden: 512
+  dim_pred_final: 512
+  output_dim: 2
+
+  emb_dropout: 0.0
+  enc_dropout: 0.0
+  cnn_dropout: 0.3
+
+  mask_hidden_state: false
+  vector_embed: false
+  init_method: xavier_init # better than none
+
+  freeze_encoder: true
+  average_attention_weights: false
+
+  max_seq_len: 175
+
+tokenizer:
+  max_seq_len: 175
+
+DataRegistry:
+  batch_size: 5
+  use_raw: false
+  original_smiles: false
+  enumerate: true
+  physchem: false
+  split: scaffold
+  limit: null
+  batch_first: true
+  pad_to_max: true
+  mask_sequences: false
+  randomize_smiles: false
+  random_type: "unrestricted"
+
+logger:
+  wandb:
+    tags: ${tags}
+    project: "molecular-interpretation"
+    group: "analysis"
+    name: ${task_name}
+
+# Callbacks
+callbacks:
+  model_summary:
+    max_depth: 1
+
+  model_checkpoint:
+    monitor: "Batch/Validation/loss"
+    mode: "min"
+
+  early_stopping:
+    monitor: "Batch/Validation/loss"
+    mode: "min"
+    patience: 3
+    min_delta: 0.1
+
+  save_data:
+    _target_: representation.src.interpretation.save_data.SaveData
+    save_dir: interpretation_files/${task_name}
+
+  ig:
+    _target_: representation.src.interpretation.integrated_gradients.ExplainabilityIntegratedGradients
+    include_baseline: true
+    save_dir: interpretation_files/${task_name}
+
+  shap:
+    _target_: representation.src.interpretation.shap.ExplainabilitySHAP
+    include_baseline: true
+    save_dir: interpretation_files/${task_name}
+
+  attention_maps:
+    _target_: representation.src.interpretation.att.AttentionMap
+    save_dir: interpretation_files/${task_name}
+
+  rollout:
+    _target_: representation.src.interpretation.att.Rollout
+    save_dir: interpretation_files/${task_name}
+
+  grad:
+    _target_: representation.src.interpretation.att_grad.Grads
+    save_dir: interpretation_files/${task_name}
+
+  att_grad:
+    _target_: representation.src.interpretation.att_grad.AttGrad
+    save_dir: interpretation_files/${task_name}
+
+  cat:
+    _target_: representation.src.interpretation.att_cat.Cat
+    save_dir: interpretation_files/${task_name}
+
+  att_cat:
+    _target_: representation.src.interpretation.att_cat.AttCat
+    save_dir: interpretation_files/${task_name}

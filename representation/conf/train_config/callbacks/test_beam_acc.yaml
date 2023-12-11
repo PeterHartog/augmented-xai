@@ -1,0 +1,3 @@
+test_beam_acc:
+  _target_: representation.src.metrics.accuracy.TestBeamSearchAccuracy
+  beam_width: 5

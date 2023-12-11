@@ -1,0 +1,79 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /DataRegistry: tdc_chembl.yaml
+  - override /ModelRegistry: bart.yaml
+  - override /pretrain_model: null
+  - override /logger: wandb.yaml
+  - override /trainer: ddp.yaml
+  - override /callbacks: lm_default.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["tests", "beam"]
+
+seed: 1234
+
+train: false
+test: true
+
+tokenizer:
+  max_seq_len: 250
+
+ModelRegistry:
+  lr: 1e-4
+  learnable_positional_encoding: false
+  vector_embed: false
+  weight_decay: 0.01
+  skip_connection: false
+  emb_size: 512
+
+DataRegistry:
+  use_raw: false
+  original_smiles: false
+  enumerate: false
+  physchem: false
+  split: unique
+  limit: null
+  batch_first: true
+  pad_to_max: true
+  mask_sequences: false
+  randomize_smiles: false
+  random_type: "unrestricted"
+
+logger:
+  wandb:
+    tags: ${tags}
+    project: "molecular-interpretation"
+    group: "test/chembl"
+    name: ???
+
+# Callbacks
+callbacks:
+  model_summary:
+    max_depth: 1
+
+  model_checkpoint:
+    monitor: "Batch/Validation/loss"
+    mode: "min"
+
+  early_stopping:
+    monitor: "Batch/Validation/loss"
+    mode: "min"
+    patience: 3
+    min_delta: 0.1
+
+  test_greedy_acc:
+    _target_: representation.src.metrics.accuracy.TestGreedySearchAccuracy
+
+  test_beam3_acc:
+    _target_: representation.src.metrics.accuracy.TestBeamSearchAccuracy
+    beam_width: 3
+
+  test_beam5_acc:
+    _target_: representation.src.metrics.accuracy.TestBeamSearchAccuracy
+    beam_width: 5

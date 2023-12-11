@@ -1,0 +1,51 @@
+# --------- pytorch --------- #
+# install the pytorch versions with cuda depending on your system
+pytorch-lightning==2.0.5      # 1.9.0
+torchmetrics>=0.11.0          # 0.11.1
+
+
+# --------- interpretation --------- #
+captum==0.6.0
+PyTDC==0.4.0
+
+# --------- hydra --------- #
+hydra-core==1.3.1
+hydra-colorlog==1.2.0
+hydra-optuna-sweeper==1.2.0
+pyrootutils>=1.0.0
+
+# --------- codebase --------- #
+aidd-codebase==0.1.11
+registry-factory==0.1.2
+
+# --------- notebooks --------- #
+ipykernel
+
+# --------- loggers --------- #
+wandb>=0.12.21
+tensorboard>=2.12.0
+# neptune-client
+# mlflow
+# comet-ml
+
+# --------- data --------- #
+rdkit==2022.9.3
+pandas>=1.3.4
+numpy>=1.21.4
+scikit-learn>=1.0.1
+scipy>=1.10.0
+
+# --------- utils --------- #
+seaborn>=0.12.2
+
+
+# --------- others --------- #
+pyrootutils     # standardizing the project root setup
+pre-commit      # hooks for applying linters on commit
+rich            # beautiful text formatting in terminal
+pytest          # tests
+pytest-cov      # coverage
+black           # code formatter
+isort           # imports formatter
+flake8          # linter
+mypy            # type checker

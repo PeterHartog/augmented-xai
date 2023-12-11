@@ -1,0 +1,9 @@
+_target_: representation.src.tokenizer.character.CharTokenizer
+
+pad_idx: 0
+bos_idx: 1
+eos_idx: 2
+unk_idx: 3
+msk_idx: 4
+vocab: ' ^$?_#%()+-./0123456789=@ABCDEFGHIKLMNOPRSTVXYZ[\]abcdefgilmnoprstuy'
+max_seq_len: 175

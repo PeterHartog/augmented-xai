@@ -1,0 +1,2 @@
+examples:
+  _target_: representation.src.metrics.show_example.ShowExamplePredictions

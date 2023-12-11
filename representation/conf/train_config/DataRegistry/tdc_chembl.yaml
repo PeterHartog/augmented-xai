@@ -1,0 +1,21 @@
+_target_: representation.src.datamodules.chembl.TDCommonsDatamodule
+
+name: tdc_chembl
+split: full
+use_raw: false
+original_smiles: false
+enumerate: false
+physchem: false
+random_state: 1234
+limit: null
+batch_size: 128
+num_workers: 8
+persistent_workers: true
+pin_memory: true
+drop_last: false
+batch_first: true
+pad_to_max: false
+mask_sequences: false
+randomize_smiles: false
+random_type: unrestricted
+root: ""

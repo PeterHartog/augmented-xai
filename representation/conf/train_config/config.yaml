@@ -1,0 +1,54 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+  - tokenizer: character_tokenizer.yaml
+  - DataRegistry: tdc_ames.yaml
+  - ModelRegistry: mlp.yaml
+  - pretrained_encoder: null
+  - pretrain_model: null
+  - callbacks: default.yaml
+  - logger: null # set logger here or use command line (e.g. `python train.py logger=tensorboard`)
+  - trainer: multi_gpu.yaml
+  - paths: default.yaml
+  - extras: default.yaml
+  - hydra: default.yaml
+
+  - hparams_search: null # config for hyperparameter optimization
+
+  # it's optional since it doesn't need to exist and is excluded from version control
+  - optional local: default.yaml # optional local config for machine/user specific settings
+
+  # override config either in this file or using experiment config
+  - _self_
+  - experiment: null # experiment configs allow for version control of specific hyperparameters
+  - debug: null # debugging config (enable through command line, e.g. `python train.py debug=default)
+
+# Information
+name: "Using test-time augmentation to investigate XAI"
+version: 3.0.1
+description: "Investigates test-time augmentation as a use to measure the robustness of XAI for NLP-based molecular toxicity prediction"
+author: "Peter Hartog"
+tags: ["publish"]
+
+# Setting
+task_name: "Unnamed" # task name, determines output directory path
+train: true # set false to skip model training
+test: true # evaluate on test set, using best model weights achieved during training
+predict: false
+
+seed: 1234 # seed for random number generators in pytorch, numpy and python.random
+ckpt_path: null # simply provide checkpoint path to resume training
+
+# Trainer
+trainer:
+  min_epochs: 1 # prevents early stopping
+  max_epochs: 50
+
+# Data
+DataRegistry:
+  root: ${paths.root_dir}
+  random_state: ${seed}
+  batch_size: 128
+  drop_last: ${trainer.devices} > 0 # drop last batch if using multiple gpus

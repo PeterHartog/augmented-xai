@@ -1,0 +1,26 @@
+_target_: representation.src.models.encoder_only.EncoderOnly
+checkpoint: pretrained_models/encoder-only/MR2C/epoch_002.ckpt
+src_vocab_size: 68
+tgt_vocab_size: 68
+num_encoder_layers: 3
+emb_size: 512
+num_heads: 8
+num_feedforward: 2
+dim_feedforward: 512
+dropout: 0.1
+norm: layer
+activation: relu
+learnable_positional_encoding: false
+skip_connection: false
+max_sep_feedforward: false
+batch_first: true
+tasks:
+  - lm
+init_method: xavier_init
+lr: 0.0001
+weight_decay: 0.01
+weight_sharing: false
+need_attention_weights: false
+average_attention_weights: false
+max_seq_len: null
+vector_embed: false

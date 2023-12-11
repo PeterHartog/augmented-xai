@@ -1,0 +1,17 @@
+_target_: representation.src.datamodules.ames.TDCommonsDatamodule
+
+name: tdc_ames
+split: scaffold
+use_raw: false
+original_smiles: false
+enumerate: false
+physchem: false
+random_state: 1234
+limit: null
+batch_size: 128
+num_workers: 8
+persistent_workers: true
+pin_memory: true
+drop_last: false
+root: ''
+encoder_style: bert

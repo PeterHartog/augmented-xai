@@ -1,0 +1,12 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /load: chembl.yaml
+
+save_path: data/chembl_cleaned.csv
+
+clean:
+  input_columns: "smiles"

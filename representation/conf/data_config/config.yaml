@@ -1,0 +1,35 @@
+# @package _global_
+
+# specify here default configuration
+# order of defaults determines the order in which configs override each other
+defaults:
+  - load: null
+  - clean: clean
+  - enum: enum
+  - logger: null # set logger here or use command line (e.g. `python train.py logger=tensorboard`)
+  - paths: default.yaml
+  - extras: default.yaml
+  - hydra: default.yaml
+
+  # it's optional since it doesn't need to exist and is excluded from version control
+  - optional local: default.yaml # optional local config for machine/user specific settings
+
+  # override config either in this file or using experiment config
+  - _self_
+  - experiment: null # experiment configs allow for version control of specific hyperparameters
+
+# Information
+name: "Using test-time augmentation to investigate XAI"
+version: 3.0.1
+description: "Investigates test-time augmentation as a use to measure the robustness of XAI for NLP-based molecular toxicity prediction"
+author: "Peter Hartog"
+tags: ["publish"]
+
+task_name: "data_cleaning" # task name, determines output directory path
+save_original: true
+
+seed: 1234 # seed for random number generators in pytorch, numpy and python.random
+
+save_path: null
+save_original_path: null
+batch_size: 2048

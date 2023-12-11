@@ -1,0 +1,3 @@
+validation_acc:
+  _target_: representation.src.metrics.accuracy.ValidationAccuracy
+  remove_bos: false

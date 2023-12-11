@@ -1,0 +1,19 @@
+# https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.callbacks.ModelPruning.htm
+
+# Model pruning Callback, using PyTorch’s prune utilities. This callback is responsible of pruning networks parameters during training.
+# Look at the above link for more detailed information.
+model_pruning:
+  _target_: pytorch_lightning.callbacks.ModelPruning
+  pruning_fn: “l1_unstructured” # function from torch.nn.utils.prune module or your own PyTorch BasePruningMethod subclass. Can also be string e.g. “l1_unstructured”.
+  parameters_to_prune: "" # list of tuples of strings or nn.Modules
+  parameter_names: "weight" # can either be "weight" or "bias".
+  use_global_unstructured: true # whether to apply pruning globally on the model. If parameters_to_prune is provided, global unstructured will be restricted on them.
+  amount: 0.05 # quantity of parameters to prune, float for percentage, int for absolute, callable for dynamic values
+  apply_pruning: true # whether to apply pruning. can also be a callable for dynamic values
+  make_pruning_permanent: true # whether to remove all reparametrization pre-hooks and apply masks when training ends or the model is saved.
+  use_lottery_ticket_hypothesis: true # whether to apply lottery ticket or not. can also be callable.
+  resample_parameters: true # used with use_lottery_ticket_hypothesis. If True, the model parameters will be resampled, otherwise, the exact original parameters will be used.
+  pruning_dim: null # if you are using a structured pruning method you need to specify the dimension.
+  pruning_norm: null # if you are using ln_structured you need to specify the norm.
+  verbose: 0 # verbosity level. 0 to disable, 1 to log overall sparsity, 2 to log per-layer sparsity
+  prune_on_train_epoch_end: true # whether to apply pruning at the end of the training epoch. If this is False, then the check runs at the end of the validation epoch.

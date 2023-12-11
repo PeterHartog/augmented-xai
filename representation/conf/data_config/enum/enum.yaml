@@ -1,0 +1,9 @@
+_target_: representation.src.actions.smiles.enumeration.SmilesEnumeration
+
+input_column: canonical_smiles
+output_column: unrestricted
+n: 100
+limit: 10
+random_type: unrestricted
+keep_original: false
+randomSeed: 1234

@@ -1,0 +1,8 @@
+defaults:
+  - default.yaml
+
+accelerator: gpu
+strategy: dp
+devices:
+  - 0
+  - 1

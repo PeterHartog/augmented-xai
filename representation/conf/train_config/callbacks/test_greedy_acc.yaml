@@ -1,0 +1,2 @@
+test_greedy_acc:
+  _target_: representation.src.metrics.accuracy.TestGreedySearchAccuracy

@@ -1,0 +1,94 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /DataRegistry: tdc_ames.yaml
+  - override /ModelRegistry: transformer_nn.yaml
+  - override /pretrained_encoder: encoder-decoder/E2C.yaml
+  - override /logger: wandb.yaml
+  - override /trainer: ddp.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+tags: ["ames", "E2C", "nn"]
+
+seed: 1234
+
+train: true
+test: true
+
+task_name: "ames/encoder_decoder_E2C"
+
+trainer:
+  devices:
+    - 0
+  max_epochs: 250
+
+ModelRegistry:
+  lr: 5e-5
+  weight_decay: 0.0001
+
+  emb_size: 512 # 512 is better than 64
+  skip_connection: false # false is better
+
+  adaption: sum # [sum, mean, flatten, neural_net]
+  adapt_embedding: false
+  dim_pred_hidden: 512
+  dim_pred_final: 512
+  output_dim: 2
+
+  emb_dropout: 0.0
+  enc_dropout: 0.0
+  nn_dropout: 0.3
+
+  mask_hidden_state: true
+  vector_embed: false
+  init_method: xavier_init # better than none
+
+  freeze_encoder: true
+
+  max_seq_len: 175
+
+tokenizer:
+  max_seq_len: 175
+
+DataRegistry:
+  batch_size: 128
+  use_raw: false
+  original_smiles: false
+  enumerate: false
+  physchem: false
+  split: scaffold
+  limit: null
+  batch_first: true
+  pad_to_max: false
+  mask_sequences: false
+  randomize_smiles: false
+  random_type: "unrestricted"
+
+logger:
+  wandb:
+    tags: ${tags}
+    project: "molecular-interpretation"
+    group: "ames"
+    name: ${task_name}
+
+callbacks:
+  model_summary:
+    max_depth: 1
+
+  model_checkpoint:
+    monitor: "Batch/Validation/Loss"
+    mode: "min"
+
+  early_stopping:
+    monitor: "Batch/Validation/Loss"
+    mode: "min"
+    patience: 50
+
+  learning_rate_monitor:
+    _target_: pytorch_lightning.callbacks.LearningRateMonitor
+    logging_interval: "epoch"   # interval to log, either step or epoch

@@ -1,0 +1,3 @@
+test_acc:
+  _target_: representation.src.metrics.accuracy.TestAccuracy
+  remove_bos: false
